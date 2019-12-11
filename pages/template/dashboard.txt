@@ -1,0 +1,189 @@
+<template>
+  <v-container fluid grid-list-lg>
+    <!--    <v-toolbar dense>-->
+    <!--      <v-toolbar-title class="text-md-center">Dashboard</v-toolbar-title>-->
+    <!--      <v-spacer/>-->
+    <!--      <ApiKeyBtn name="Add" @submitRequest="addKey"/>-->
+    <!--      <v-btn outlined @click="generateSecret" class="ml-1">Generate Secret</v-btn>-->
+    <!--  -->
+    <!--    </v-toolbar>-->
+    <v-row>
+      <v-col>
+        <v-card>
+          <v-card-title>
+            <span class="headline">Dashboard</span>
+
+            <v-spacer />
+
+            <!--            <v-menu bottom left>-->
+            <!--              <template v-slot:activator="{ on }">-->
+            <!--                <v-btn outlined v-on="on"> Manage Secret</v-btn>-->
+            <!--              </template>-->
+
+            <!--              <v-list shaped rounded subheader>-->
+            <!--                <v-subheader>Manage Secret</v-subheader>-->
+            <!--                <v-list-item-group color="primary">-->
+            <!--                  <v-list-item>-->
+            <!--                    <v-list-item-content>-->
+            <!--                      <v-list-item-action @click="generateSecret">-->
+            <!--                        Generate Secret-->
+            <!--                      </v-list-item-action>-->
+            <!--                    </v-list-item-content>-->
+            <!--                  </v-list-item>-->
+
+            <!--                  <v-list-item>-->
+            <!--                    <v-list-item-content>-->
+            <!--                      <v-list-item-action @click="generateSecret">-->
+            <!--                        Reveal Secret-->
+            <!--                      </v-list-item-action>-->
+            <!--                    </v-list-item-content>-->
+            <!--                  </v-list-item>-->
+
+            <!--                </v-list-item-group>-->
+            <!--              </v-list>-->
+
+            <!--            </v-menu>-->
+          </v-card-title>
+          <v-card-actions>
+            <v-layout row wrap justify-end>
+              <v-flex xs12 lg2>
+                <v-btn outlined @click="generateSecret" class="ml-1">Generate Secret</v-btn>
+              </v-flex>
+              <v-flex xs12 lg2>
+                <v-btn outlined @click="generateSecret" class="ml-1">Generate Secret</v-btn>
+              </v-flex>
+            </v-layout>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+    </v-row>
+
+    <v-layout row wrap>
+      <v-flex xs12 lg4 v-for="key in apiKeys" :key="key.id">
+        <v-hover>
+          <v-card slot-scope="{ hover }" :class="`elevation-${hover ? 24 : 2}`">
+            <v-card-title>{{key.keyName}}</v-card-title>
+            <v-card-text>{{key.keyValue}}</v-card-text>
+            <v-card-actions class="title">
+              <v-btn outlined v-clipboard:copy="key.keyValue" v-clipboard:success="copySuccess">Copy</v-btn>
+
+              <ApiKeyBtn
+                class="mr-1"
+                name="Update"
+                :keyId="key.id"
+                :user="key.user"
+                @submitRequest="updateKey"
+              />
+              {{$auth.user}}
+              <v-btn outlined @click="deleteKey(key.id)">Delete</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-hover>
+      </v-flex>
+    </v-layout>
+    <Flash :flash="flash" />
+  </v-container>
+</template>
+
+<script>
+import { ENDPOINTS } from "./enpoints";
+
+const apiKeyEndpoint = "apikey/";
+const secretKeyEndpoint = "secret/";
+// TODO: clean up generate secret for much later
+
+export default {
+  name: "Dashboard",
+  middleware: "authenticated",
+  data: () => ({
+    itemsz: [
+      { text: "Real-Time", icon: "mdi-clock" },
+      { text: "Audience", icon: "mdi-account" },
+      { text: "Conversions", icon: "mdi-flag" }
+    ],
+    items: [
+      { title: "Click Me" },
+      { title: "Click Me" },
+      { title: "Click Me" },
+      { title: "Click Me 2" }
+    ],
+    apiKeys: [],
+    apiKey: {
+      type: "clientApiKey",
+      name: "",
+      value: "",
+      userId: null
+    },
+    flash: {
+      message: "",
+      color: "",
+      snackbar: false,
+      timeout: 3000
+    }
+  }),
+  methods: {
+    test() {},
+    generateSecret() {
+      alert("hi");
+      // const generate = secretKeyEndpoint.concat(id).concat("/generate");
+      // this.$axios
+      //   .get(generate)
+      //   .then(res => alert(JSON.stringify(res.data)))
+      //   .catch(error => this.flashMessage(error.message, "error", false));
+    },
+    getApiKeys() {
+      console.log(ENDPOINTS.GetApiKeyByUserId);
+      this.$axios
+        .get(getAllApiKeys)
+        .then(res => {
+          this.apiKeys = res.data;
+        })
+        .catch(error => this.flashMessage(error.message, "error", false));
+    },
+    // addKey(key) {
+    //   key.userId = this.getUserId();
+    //   this.$axios
+    //     .post(ENDPOINTS.PostApiKey, key)
+    //     .then(res => this.flashMessage(res.data, "success", true))
+    //     .catch(error => this.flashMessage(error.message, "error", false));
+    // },
+    // updateKey(key) {
+    //   key.userId = this.getUserId();
+    //   this.$axios
+    //     .put(ENDPOINTS.PostApiKey, key)
+    //     .then(res => this.flashMessage(res.data, "success", true))
+    //     .catch(error => this.flashMessage(error.message, "error", false));
+    // },
+    // deleteKey(keyId) {
+    //   const endPoint =
+    //     this.normalizeApiEndpoint(ENDPOINTS.DeleteApiKey, ["*id", "*apikeyid"], [this.getUserId(), keyId]);
+    //   this.$axios
+    //     .delete(endPoint)
+    //     .then(res => {
+    //       this.flashMessage(res.data, "success", true);
+    //     })
+    //     .catch(error => this.flashMessage(error.message, "error", false));
+    // },
+    copySuccess() {
+      this.flashMessage("Copied", "success", false);
+    },
+    flashMessage(message, color, reload) {
+      this.flash.message = message;
+      this.flash.color = color;
+      this.flash.snackbar = true;
+      if (reload) {
+        setTimeout(() => location.reload(), 800);
+      }
+    }
+  },
+  created() {
+    this.getApiKeys();
+  },
+  computed: {},
+  components: {
+    ApiKeyBtn: () => import("~/components/ApiKeyBtn"),
+    Flash: () => import("~/components/Flash")
+  }
+};
+</script>
+

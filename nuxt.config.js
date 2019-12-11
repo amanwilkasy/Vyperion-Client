@@ -48,6 +48,7 @@ module.exports = {
     '@nuxtjs/pwa',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
+    'nuxt-clipboard2'
   ],
   /*
   ** Axios module configuration
@@ -57,7 +58,8 @@ module.exports = {
     baseURL: 'http://localhost:8080/'
   },
   router: {
-    middleware: ['auth']
+    middleware: ['auth'],
+    auth: false
   },
   auth: {
     strategies: {

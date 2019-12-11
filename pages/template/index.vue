@@ -6,7 +6,7 @@
       logged in
       {{$auth.user}}
       <v-btn @click="signOut">Log out</v-btn>
-       <v-btn @click="getData">Get Data</v-btn>
+      <v-btn @click="getData">Get Data</v-btn>
       <!-- {{$auth.strategies}} -->
     </div>
 
@@ -20,21 +20,21 @@ import VuetifyLogo from "~/components/VuetifyLogo.vue";
 
 export default {
   methods: {
-    signOut() { 
+    signOut() {
       this.$auth
         .logout()
-        .then(() => { 
+        .then(() => {
           this.$router.push("/login");
         })
         .catch(error => {
           console.log(error);
         });
     },
-      getData() { 
+    getData() {
       this.$axios
         .get("apikey/402881706e907115016e9071202d0000")
-        .then(res => { 
-          console.log(res.data)
+        .then(res => {
+          console.log(res.data);
         })
         .catch(error => {
           console.log(error);
