@@ -100,8 +100,7 @@ export default {
         })
         .catch(error => this.flashMessage(error.message, "error"));
     },
-    signIn() {
-      alert(JSON.stringify(this.signUpUser));
+    signIn() { 
       this.$auth
         .login({
           data: {
