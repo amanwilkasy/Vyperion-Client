@@ -61,6 +61,7 @@
         <v-btn color="primary" :disabled="invalid" type="submit">Sign Up</v-btn>
       </v-form>
     </ValidationObserver>
+    <Flash :flash="flash" />
   </v-container>
 </template>
 
@@ -77,31 +78,44 @@ export default {
       lastName: "",
       email: "",
       password: ""
+    },
+    flash: {
+      message: "",
+      color: "",
+      snackbar: false,
+      timeout: 3000
     }
   }),
   components: {
     ValidationProvider,
-    ValidationObserver
+    ValidationObserver,
+    Flash: () => import("~/components/Flash")
   },
   methods: {
     submit() {
       this.$axios
         .post(ENDPOINTS.SignUp, this.signUpUser)
-        .then(res => {
+        .then(res => { 
           this.signIn();
-        }).catch(error => this.flashMessage(error.message, "error"));
+        })
+        .catch(error => this.flashMessage(error.message, "error"));
     },
     signIn() {
-      this.$auth.login({
+      alert(JSON.stringify(this.signUpUser));
+      this.$auth
+        .login({
           data: {
             type: "signInUser",
             email: this.signUpUser.email,
             password: this.signUpUser.password
           }
-        }).then(() => {
+        })
+        .then(res => {
+          console.log(res.data);
           this.flashMessage("Logged In", "success");
           this.$router.push("/dashboard");
-        }).catch(error => this.flashMessage(error.message, "error"));
+        })
+        .catch(error => this.flashMessage(error.message, "error"));
     },
     flashMessage(message, color, reload) {
       this.flash.message = message;
