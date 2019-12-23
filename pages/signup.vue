@@ -95,12 +95,12 @@ export default {
     submit() {
       this.$axios
         .post(ENDPOINTS.SignUp, this.signUpUser)
-        .then(res => { 
+        .then(res => {
           this.signIn();
         })
         .catch(error => this.flashMessage(error.message, "error"));
     },
-    signIn() { 
+    signIn() {
       this.$auth
         .login({
           data: {
@@ -110,7 +110,6 @@ export default {
           }
         })
         .then(res => {
-          console.log(res.data);
           this.flashMessage("Logged In", "success");
           this.$router.push("/dashboard");
         })
