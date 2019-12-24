@@ -9,11 +9,11 @@
             label="Email"
             append-icon="fas fa-envelope"
             name="email"
+            type="email"
             clearable
             required
             autofocus
           />
-          <!--type="email"-->
           <span>{{ errors[0] }}</span>
         </validation-provider>
 
@@ -38,7 +38,6 @@
 </template>
 
 <script>
-import { ENDPOINTS } from "./endpoints";
 import { ValidationProvider, ValidationObserver } from "vee-validate";
 export default {
   name: "Navigation",

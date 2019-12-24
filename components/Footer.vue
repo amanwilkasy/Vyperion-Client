@@ -1,8 +1,7 @@
 <template>
   <v-footer :fixed="fixed" app>
     <span>&copy; {{year}} {{title}}</span>
-    <!-- <span>{{title}}</span> -->
-    <v-spacer></v-spacer>
+    <v-spacer/>
 
     <v-btn icon>
       <v-icon>mdi-heart</v-icon>

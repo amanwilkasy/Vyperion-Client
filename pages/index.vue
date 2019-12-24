@@ -23,8 +23,6 @@
 </template>
 
 <script>
-import { ENDPOINTS } from "./endpoints";
-
 export default {
   auth: false,
   data: () => ({}),

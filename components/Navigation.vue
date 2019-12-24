@@ -37,7 +37,7 @@
       <v-spacer />
 
       <div class="text-center">
-        <div v-if="$auth.loggedIn"> 
+        <div v-if="$auth.loggedIn">
           <v-btn @click="$auth.logout()">Log out</v-btn>
         </div>
 
@@ -85,20 +85,9 @@ export default {
     right: true,
     rightDrawer: false,
     title: "Vyperion"
-  }),
-  methods: {
-    signOut() {
-      this.$auth
-        .logout()
-        .then(() => {
-          this.$router.push("/login");
-        })
-        .catch(error => alert(error));
-    }
-  },
-  computed: {}
+  })
 };
 </script>
 
-<style scoped> 
+<style scoped>
 </style>

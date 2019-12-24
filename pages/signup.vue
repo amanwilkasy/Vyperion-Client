@@ -95,7 +95,7 @@ export default {
     submit() {
       this.$axios
         .post(ENDPOINTS.SignUp, this.signUpUser)
-        .then(res => {
+        .then(() => {
           this.signIn();
         })
         .catch(error => this.flashMessage(error.message, "error"));
@@ -109,7 +109,7 @@ export default {
             password: this.signUpUser.password
           }
         })
-        .then(res => {
+        .then(() => {
           this.flashMessage("Logged In", "success");
           this.$router.push("/dashboard");
         })
